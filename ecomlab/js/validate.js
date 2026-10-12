@@ -12,7 +12,9 @@ document.getElementById('registerForm').addEventListener('submit', function (eve
 
   check('customer_name', form.customer_name.value.trim() !== '', 'Name is required.');
   check('customer_email', emailRegex.test(form.customer_email.value.trim()), 'Enter a valid email.');
-  check('customer_pass', form.customer_pass.value.length >= 6, 'Password must be at least 6 characters.');
+  // passwordStrength() comes from password.js
+  check('customer_pass', passwordStrength(form.customer_pass.value).ok,
+    'Password must be at least 8 characters and include at least 3 of: lowercase letter, uppercase letter, number, symbol.');
   check('customer_country', form.customer_country.value !== '', 'Choose a country.');
   check('customer_city', form.customer_city.value.trim() !== '', 'City is required.');
   check('customer_contact', phoneRegex.test(form.customer_contact.value.trim()), 'Enter a valid phone number.');

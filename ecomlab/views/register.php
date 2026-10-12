@@ -11,6 +11,7 @@ require __DIR__ . '/layout/header.php';
 <?php endif; ?>
 
 <form id="registerForm" action="../actions/register_action.php" method="POST" enctype="multipart/form-data">
+  <?= csrf_field() ?>
   <label>Full Name</label>
   <input type="text" name="customer_name" maxlength="100">
   <span class="error" id="customer_name_error"></span>
@@ -20,7 +21,8 @@ require __DIR__ . '/layout/header.php';
   <span class="error" id="customer_email_error"></span>
 
   <label>Password</label>
-  <input type="password" name="customer_pass">
+  <input type="password" name="customer_pass" data-strength>
+  <span class="hint">At least 8 characters, with at least 3 of: lowercase letter, uppercase letter, number, symbol.</span>
   <span class="error" id="customer_pass_error"></span>
 
   <label>Country</label>
@@ -51,5 +53,6 @@ require __DIR__ . '/layout/header.php';
 
 <p>Already have an account? <a href="login.php">Login</a></p>
 
+<script src="../js/password.js"></script>
 <script src="../js/validate.js"></script>
 <?php require __DIR__ . '/layout/footer.php'; ?>

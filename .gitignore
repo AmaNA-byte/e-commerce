@@ -1,0 +1,7 @@
+.DS_Store
+
+# Pictures uploaded through the site (profile, brand and product pictures) stay off GitHub.
+ecomlab/uploads/*
+ecomlab/images/products/*
+!ecomlab/uploads/.gitkeep
+!ecomlab/images/products/.gitkeep

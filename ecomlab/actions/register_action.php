@@ -29,18 +29,17 @@ if (in_array('', [$data['name'], $data['email'], $data['pass'], $data['country']
 } elseif (strlen($data['name']) > 100 || strlen($data['email']) > 50 || strlen($data['country']) > 30
        || strlen($data['city']) > 30 || strlen($data['contact']) > 15) {
   $error = 'One or more fields are too long.';
+} elseif (!password_is_strong($data['pass'])) {
+  $error = PASSWORD_RULE;
 }
 
 // Optional profile image
-if (!$error && !empty($_FILES['customer_image']['name'])) {
-  $ext = strtolower(pathinfo($_FILES['customer_image']['name'], PATHINFO_EXTENSION));
-  if (!in_array($ext, ['jpg', 'jpeg', 'png', 'gif'])) {
-    $error = 'Image must be a JPG, PNG or GIF.';
-  } else {
-    $filename = uniqid() . '.' . $ext;
-    move_uploaded_file($_FILES['customer_image']['tmp_name'], __DIR__ . '/../uploads/' . $filename);
-    $data['image'] = 'uploads/' . $filename;
+if (!$error) {
+  $upload = upload_image('customer_image');
+  if (isset($upload['error'])) {
+    $error = $upload['error'];
   }
+  $data['image'] = $upload['path'] ?? null;
 }
 
 if ($error) {

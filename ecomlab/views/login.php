@@ -11,6 +11,7 @@ require __DIR__ . '/layout/header.php';
 <?php endif; ?>
 
 <form action="../actions/login_action.php" method="POST">
+  <?= csrf_field() ?>
   <label>Email</label>
   <input type="email" name="customer_email" required>
 

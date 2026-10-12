@@ -27,4 +27,10 @@ $_SESSION['customer_id'] = $result['customer_id'];
 $_SESSION['customer_name'] = $result['customer_name'];
 $_SESSION['customer_email'] = $result['customer_email'];
 $_SESSION['user_role'] = (int) $result['user_role'];
+
+// Old accounts may still have a weak password: make them pick a strong one now.
+if (!password_is_strong($pass)) {
+  $_SESSION['must_change_password'] = true;
+  redirect('../views/account/change_password.php');
+}
 redirect('../index.php');

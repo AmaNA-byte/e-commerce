@@ -14,4 +14,5 @@ require __DIR__ . '/../layout/header.php';
 <p><strong>Name:</strong> <?= e($_SESSION['customer_name']) ?></p>
 <p><strong>Email:</strong> <?= e($_SESSION['customer_email']) ?></p>
 <p><strong>Account type:</strong> <?= is_admin() ? 'Admin' : 'Customer' ?></p>
+<p><a href="change_password.php" class="btn">Change Password</a></p>
 <?php require __DIR__ . '/../layout/footer.php'; ?>

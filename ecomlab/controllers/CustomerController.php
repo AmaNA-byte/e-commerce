@@ -31,4 +31,26 @@ class CustomerController {
     }
     return $customer;
   }
+
+  public function changePassword($id, $email, $current, $new) {
+    if (!$this->customer->login($email, $current)) {
+      return ['success' => false, 'error' => 'Your current password is incorrect.'];
+    }
+    if (!$this->customer->updatePassword($id, $new)) {
+      return ['success' => false, 'error' => 'Could not change the password. Please try again.'];
+    }
+    return ['success' => true];
+  }
+
+  public function getAllCustomers() {
+    return $this->customer->getAllCustomers();
+  }
+
+  public function getCustomerById($id) {
+    return $this->customer->getCustomerById($id);
+  }
+
+  public function updateRole($id, $role) {
+    return $this->customer->updateRole($id, $role);
+  }
 }
