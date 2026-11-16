@@ -60,6 +60,67 @@ class CustomerClass extends Database {
     return $stmt->execute();
   }
 
+  // ---- 6-digit email codes: 'verify' (confirm email after sign-up) and 'reset' (forgot password) ----
+
+  const CODE_MAX_ATTEMPTS = 5;
+
+  private function codeHash($customer_id, $purpose, $code) {
+    return hash('sha256', $customer_id . ':' . $purpose . ':' . $code);
+  }
+
+  // Makes a new 6-digit code valid for $minutes and returns it. Only its hash is stored.
+  // Any older code for the same purpose stops working.
+  public function createCode($customer_id, $purpose, $minutes = 15) {
+    $code = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+    $hash = $this->codeHash($customer_id, $purpose, $code);
+    $now = date('Y-m-d H:i:s');
+    $expires = date('Y-m-d H:i:s', time() + $minutes * 60);
+
+    $this->deleteCodes($customer_id, $purpose);
+    $stmt = $this->conn->prepare('INSERT INTO email_codes (customer_id, purpose, code_hash, expires_at, created_at) VALUES (?, ?, ?, ?, ?)');
+    $stmt->bind_param('issss', $customer_id, $purpose, $hash, $expires, $now);
+    return $stmt->execute() ? $code : false;
+  }
+
+  // When the last code of this kind was sent (to limit how often codes can be emailed), or null.
+  public function lastCodeTime($customer_id, $purpose) {
+    $stmt = $this->conn->prepare('SELECT MAX(created_at) FROM email_codes WHERE customer_id = ? AND purpose = ?');
+    $stmt->bind_param('is', $customer_id, $purpose);
+    $stmt->execute();
+    return $stmt->get_result()->fetch_row()[0];
+  }
+
+  // Checks a typed code. Returns 'ok', 'wrong' (try again) or 'none' (expired, used up, or too many wrong tries).
+  public function checkCode($customer_id, $purpose, $code) {
+    $now = date('Y-m-d H:i:s');
+    $stmt = $this->conn->prepare('SELECT id, code_hash, attempts FROM email_codes WHERE customer_id = ? AND purpose = ? AND expires_at > ?');
+    $stmt->bind_param('iss', $customer_id, $purpose, $now);
+    $stmt->execute();
+    $row = $stmt->get_result()->fetch_assoc();
+    if (!$row || $row['attempts'] >= self::CODE_MAX_ATTEMPTS) {
+      return 'none';
+    }
+    if (hash_equals($row['code_hash'], $this->codeHash($customer_id, $purpose, (string) $code))) {
+      return 'ok';
+    }
+    $stmt = $this->conn->prepare('UPDATE email_codes SET attempts = attempts + 1 WHERE id = ?');
+    $stmt->bind_param('i', $row['id']);
+    $stmt->execute();
+    return $row['attempts'] + 1 >= self::CODE_MAX_ATTEMPTS ? 'none' : 'wrong';
+  }
+
+  public function deleteCodes($customer_id, $purpose) {
+    $stmt = $this->conn->prepare('DELETE FROM email_codes WHERE customer_id = ? AND purpose = ?');
+    $stmt->bind_param('is', $customer_id, $purpose);
+    return $stmt->execute();
+  }
+
+  public function markVerified($customer_id) {
+    $stmt = $this->conn->prepare('UPDATE customer SET is_verified = 1 WHERE customer_id = ?');
+    $stmt->bind_param('i', $customer_id);
+    return $stmt->execute();
+  }
+
   // Returns the customer row if the password is correct, otherwise false.
   public function login($email, $pass) {
     $row = $this->getCustomerByEmail($email);

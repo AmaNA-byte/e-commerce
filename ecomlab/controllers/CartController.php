@@ -35,4 +35,20 @@ class CartController {
   public function updateQuantity($product_id, $qty, $ip) {
     return $this->cart->updateQuantity($product_id, $qty, $ip);
   }
+
+  public function processPayment($customer_id, $ip, $reference, $amount, $currency = 'GHS', $usd_rate = null) {
+    return $this->cart->processPayment($customer_id, $ip, $reference, $amount, $currency, $usd_rate);
+  }
+
+  public function getOrderById($order_id) {
+    return $this->cart->getOrderById($order_id);
+  }
+
+  public function getOrderIdByReference($reference) {
+    return $this->cart->getOrderIdByReference($reference);
+  }
+
+  public function getOrdersByCustomer($customer_id) {
+    return $this->cart->getOrdersByCustomer($customer_id);
+  }
 }

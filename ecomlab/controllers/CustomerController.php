@@ -53,4 +53,38 @@ class CustomerController {
   public function updateRole($id, $role) {
     return $this->customer->updateRole($id, $role);
   }
+
+  public function getCustomerByEmail($email) {
+    return $this->customer->getCustomerByEmail($email);
+  }
+
+  public function createCode($customer_id, $purpose, $minutes = 15) {
+    return $this->customer->createCode($customer_id, $purpose, $minutes);
+  }
+
+  public function lastCodeTime($customer_id, $purpose) {
+    return $this->customer->lastCodeTime($customer_id, $purpose);
+  }
+
+  public function checkCode($customer_id, $purpose, $code) {
+    return $this->customer->checkCode($customer_id, $purpose, $code);
+  }
+
+  public function deleteCodes($customer_id, $purpose) {
+    return $this->customer->deleteCodes($customer_id, $purpose);
+  }
+
+  public function markVerified($customer_id) {
+    return $this->customer->markVerified($customer_id);
+  }
+
+  // Forgot password: new password, code used up, and the email counts as verified (they proved they own it).
+  public function resetPassword($customer_id, $pass) {
+    if (!$this->customer->updatePassword($customer_id, $pass)) {
+      return false;
+    }
+    $this->customer->deleteCodes($customer_id, 'reset');
+    $this->customer->markVerified($customer_id);
+    return true;
+  }
 }

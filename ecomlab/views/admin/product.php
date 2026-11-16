@@ -58,7 +58,7 @@ require __DIR__ . '/../layout/header.php';
   <label>Product Title</label>
   <input type="text" name="product_title" maxlength="200" value="<?= e(field('product_title')) ?>" required>
 
-  <label>Price ($)</label>
+  <label>Price (USD $)</label>
   <input type="number" name="product_price" min="0.01" step="0.01" value="<?= e(field('product_price')) ?>" required>
 
   <label>Category</label>

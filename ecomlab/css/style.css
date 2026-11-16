@@ -200,3 +200,39 @@ button.danger { background: #dc2626; }
 button.danger:hover { background: #991b1b; }
 td .btn { font-size: 14px; }
 .inline-form:first-child button { margin-left: 0; }
+
+/* 6-digit email code boxes (verify email, reset password) */
+.code-inputs { display: flex; gap: 8px; margin-top: 6px; }
+form .code-inputs input { width: 46px; height: 54px; padding: 0; text-align: center; font-size: 24px; font-weight: bold; }
+.code-sent { font-size: 15px; }
+.link-button { background: none; color: var(--blue); padding: 0; margin: 0; text-decoration: underline; font-size: inherit; cursor: pointer; }
+.link-button:hover { background: none; color: var(--blue-dark); }
+.inline-form.resend { margin-top: 12px; display: block; }
+
+/* Payment receipt (views/payment_success.php) */
+.receipt { background: #fff; border: 1px solid #dbeafe; border-radius: 6px; padding: 24px; margin-bottom: 20px; }
+.receipt p { margin: 0 0 6px; }
+.receipt .muted, .muted { color: #64748b; }
+.receipt-head { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid var(--blue); padding-bottom: 12px; margin-bottom: 16px; }
+.receipt-shop { font-size: 26px; font-weight: bold; color: var(--blue-dark); }
+.receipt-paid { border: 2px solid #16a34a; color: #16a34a; font-weight: bold; padding: 4px 14px; border-radius: 4px; letter-spacing: 2px; }
+.receipt-meta { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 16px; }
+.receipt-meta .muted { display: inline-block; min-width: 90px; }
+.receipt-thanks { margin-top: 16px !important; }
+
+/* Printing / Save as PDF: only the receipt */
+@media print {
+  .side-nav, header, footer, .no-print, p.success, p.error { display: none !important; }
+  .page { margin-left: 0 !important; }
+  body { background: #fff; }
+  main { padding: 0; max-width: 100%; }
+  .receipt { border: none; padding: 0; }
+  th { background: #e2e8f0 !important; color: #000 !important; }
+}
+
+/* USD / GHS switch in the top bar */
+.currency-switch { display: flex; border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 4px; overflow: hidden; }
+.currency-switch a { padding: 5px 10px; font-size: 13px; font-weight: bold; }
+.currency-switch a:hover { text-decoration: none; background: rgba(255, 255, 255, 0.15); }
+.currency-switch a.active { background: #fff; color: var(--blue-dark); }
+.rate-note { font-size: 14px; color: #475569; }

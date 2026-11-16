@@ -55,10 +55,15 @@ if (!$result['success']) {
   redirect('../views/register.php');
 }
 
-session_regenerate_id(true);
-$_SESSION['customer_id'] = $result['customer_id'];
-$_SESSION['customer_name'] = $data['name'];
-$_SESSION['customer_email'] = $data['email'];
-$_SESSION['user_role'] = 2; // new sign-ups are regular customers
-$_SESSION['success'] = 'You are now registered as ' . $data['name'] . '.';
-redirect('../views/account/my_account.php');
+// New accounts must verify their email before they can log in: email a 6-digit code.
+require_once __DIR__ . '/../core/email_codes.php';
+$customer = $controller->getCustomerByEmail($data['email']);
+$status = send_code($controller, $customer, 'verify');
+
+$_SESSION['verify_email'] = $data['email'];
+if ($status === 'sent') {
+  $_SESSION['success'] = 'Account created! We emailed a 6-digit code to ' . $data['email'] . '.';
+} elseif (empty($_SESSION['dev_code'])) {
+  $_SESSION['error'] = 'Your account was created, but we could not send the code. Click "Send a new code" to try again.';
+}
+redirect('../views/verify_email.php');

@@ -3,6 +3,7 @@
 session_start();
 date_default_timezone_set('Africa/Accra');
 require_once __DIR__ . '/db_class.php';
+require_once __DIR__ . '/currency.php'; // USD / GHS prices
 
 // Site root, used to build links that work from any folder.
 // Worked out automatically, so it works on any server (e.g. /ecomlab/ or /~name/shoppn/).
@@ -126,6 +127,12 @@ function upload_image($field) {
 // Returns ['filename' => ...] or ['error' => message].
 function save_product_image($file) {
   return save_picture($file, 'images/products', true);
+}
+
+// Full address of a page on this site, e.g. http://localhost/ecomlab/views/login.php (for links in emails).
+function site_url($path) {
+  $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+  return $scheme . '://' . $_SERVER['HTTP_HOST'] . BASE_URL . $path;
 }
 
 function get_ip() {

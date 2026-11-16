@@ -29,6 +29,7 @@ $cart_total = $cartController->getCartTotal(get_ip());
   <ul>
     <?php if (is_logged_in()): ?>
       <li><a href="<?= BASE_URL ?>views/account/my_account.php">My Account</a></li>
+      <li><a href="<?= BASE_URL ?>views/account/orders.php">My Orders</a></li>
       <li><a href="<?= BASE_URL ?>logout.php">Logout</a></li>
     <?php else: ?>
       <li><a href="<?= BASE_URL ?>views/login.php">Login</a></li>
@@ -55,8 +56,14 @@ $cart_total = $cartController->getCartTotal(get_ip());
       <button type="submit">Search</button>
     </form>
 
+    <div class="currency-switch" title="Show prices in">
+      <?php foreach (array_keys(CURRENCIES) as $code): ?>
+        <a href="<?= e(currency_link($code)) ?>" class="<?= current_currency() === $code ? 'active' : '' ?>"><?= $code ?></a>
+      <?php endforeach; ?>
+    </div>
+
     <div class="cart-summary">
-      Shopping Cart &mdash; Total Items: <?= $cart_count ?> | Total Price: $<?= number_format($cart_total, 2) ?> |
+      Shopping Cart &mdash; Total Items: <?= $cart_count ?> | Total Price: <?= money($cart_total) ?> |
       <a href="<?= BASE_URL ?>views/cart.php">Go to Cart</a>
     </div>
   </nav>

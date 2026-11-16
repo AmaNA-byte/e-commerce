@@ -34,20 +34,20 @@ require __DIR__ . '/layout/header.php';
             </a>
           </td>
           <td><input type="number" name="qty[<?= e($item['p_id']) ?>]" value="<?= e($item['qty']) ?>" min="1" max="99" required></td>
-          <td>$<?= number_format($item['product_price'], 2) ?></td>
-          <td>$<?= number_format($item['qty'] * $item['product_price'], 2) ?></td>
+          <td><?= money($item['product_price']) ?></td>
+          <td><?= money($item['qty'] * $item['product_price']) ?></td>
         </tr>
       <?php endforeach; ?>
       <tr>
         <th colspan="4" class="subtotal">Subtotal</th>
-        <th>$<?= number_format($subtotal, 2) ?></th>
+        <th><?= money($subtotal) ?></th>
       </tr>
     </table>
 
     <button type="submit" formaction="../actions/remove_from_cart_action.php" formnovalidate>Remove from Cart</button>
     <button type="submit" formaction="../actions/update_cart_action.php">Update Quantity</button>
     <a href="<?= BASE_URL ?>index.php" class="btn">Continue Shopping</a>
-    <span class="btn disabled" title="Checkout will be added in a later task">Checkout</span>
+    <a href="<?= BASE_URL ?>views/payment.php" class="btn">Checkout</a>
   </form>
 <?php else: ?>
   <p>Your cart is empty.</p>

@@ -19,7 +19,7 @@ require __DIR__ . '/layout/header.php';
 
   <div class="info">
     <h1><?= e($product['product_title']) ?></h1>
-    <p class="price">$<?= number_format($product['product_price'], 2) ?></p>
+    <p class="price"><?= money($product['product_price']) ?></p>
     <p><strong>Category:</strong> <a href="<?= BASE_URL ?>index.php?cat=<?= e($product['product_cat']) ?>"><?= e($product['cat_name']) ?></a></p>
     <p><strong>Brand:</strong> <a href="<?= BASE_URL ?>index.php?brand=<?= e($product['product_brand']) ?>"><?= e($product['brand_name']) ?></a></p>
     <p><strong>Description:</strong> <?= nl2br(e($product['product_desc'])) ?></p>

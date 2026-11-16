@@ -21,5 +21,6 @@ require __DIR__ . '/layout/header.php';
   <button type="submit">Login</button>
 </form>
 
+<p><a href="forgot_password.php">Forgot your password?</a></p>
 <p>Don't have an account? <a href="register.php">Register</a></p>
 <?php require __DIR__ . '/layout/footer.php'; ?>

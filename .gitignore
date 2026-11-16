@@ -5,3 +5,6 @@ ecomlab/uploads/*
 ecomlab/images/products/*
 !ecomlab/uploads/.gitkeep
 !ecomlab/images/products/.gitkeep
+
+# Secret keys stay off GitHub. Create this file yourself with your own Paystack test keys.
+ecomlab/core/paystack_keys.php
